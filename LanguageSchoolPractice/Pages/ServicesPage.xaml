@@ -1,0 +1,94 @@
+﻿<Page x:Class="LanguageSchoolPractice.Pages.ServicesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LanguageSchoolPractice.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ServicesPage" Loaded="ServicesPageLoaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="128*"/>
+            <RowDefinition Height="243*"/>
+            <RowDefinition Height="79*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+
+        <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" >
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center" Text="Поиск:"></TextBlock>
+                <TextBox Margin="10" x:Name="tbSearchName" Width="200" TextChanged="TbSearchNameTextChanged"></TextBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Сортировка" Margin="10"></TextBlock>
+                <ComboBox Margin="10" x:Name="cbSortPrice" SelectionChanged="CbSortPriceSelectionChanged" SelectedIndex="0">
+                    <ComboBoxItem Content="Нет сортировки"></ComboBoxItem>
+                    <ComboBoxItem Content="По убыванию"></ComboBoxItem>
+                    <ComboBoxItem Content="По возрастанию"></ComboBoxItem>
+                </ComboBox>
+
+                <TextBlock Margin="10" Text="Фильтрация по скидке:"></TextBlock>
+                <ComboBox Margin="10" x:Name="cbFilterDiscount" SelectedIndex="0" SelectionChanged="CbFilterDiscountSelectionChanged">
+                    <ComboBoxItem Content="Без фильтрации по скидке"></ComboBoxItem>
+                    <ComboBoxItem Content="от 0 до 5%"></ComboBoxItem>
+                    <ComboBoxItem Content="от 5 до 15%"></ComboBoxItem>
+                    <ComboBoxItem Content="от 15 до 30%"></ComboBoxItem>
+                    <ComboBoxItem Content="от 30 до 70%"></ComboBoxItem>
+                    <ComboBoxItem Content="от 70 до 100%"></ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+
+        <ListView x:Name="lvServices" Margin="0,10,0,0" Grid.Row="1" Grid.Column="1" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalContentAlignment="Stretch" SelectionChanged="LvServicesSelectionChanged">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Background="{Binding Path=ServiceBackgroundColor}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Source="{Binding Path=PhotoBytes}" Width="150" Height="150" Margin="10"/>
+                        <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Top">
+                            <TextBlock Text="{Binding Path=Title}"></TextBlock>
+                            <StackPanel Margin="10">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock TextDecorations="Strikethrough" Text="{Binding Path=Cost, StringFormat={}{0:F0}}" Visibility="{Binding Path=IsHaveDiscount}" VerticalAlignment="Center"></TextBlock>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}  {0:F0} рублей за {1}">
+                                                <Binding Path="CostWithDiscount" />
+                                                <Binding Path="DurationInMinutes" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                                <TextBlock Text="{Binding Path=DiscountDisplay}"></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Bottom" Margin="0 0 0 8">
+                            <Button x:Name="btnEditService" Visibility="{Binding AdminVisibility}" Tag="{Binding ID}" Content="Редактировать" Margin="0 0 5 0" Click="BtnEditServiceClick"/>
+                            <Button x:Name="btnDeleteService" Visibility="{Binding AdminVisibility}" Tag="{Binding ID}" Content="Удалить" Margin="5 0 0 0" Click="BtnDeleteServiceClick"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <StackPanel Grid.Row="3" Grid.Column="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="btnAddNewService" Content="Добавить новую услугу" Margin="10" Click="BtnAddNewServiceClick"/>
+                <Button x:Name="btnShowClientRecords" Content="Просмотреть записи" Margin="10" Click="BtnShowClientRecordsClick"/>
+            </StackPanel>
+            <TextBlock x:Name="tbDataCount"></TextBlock>
+        </StackPanel>
+    </Grid>
+</Page>
